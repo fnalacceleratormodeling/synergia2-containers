@@ -110,6 +110,7 @@ RUN mkdir /opt/spack-environment \
 # Find externals
 RUN spack external find perl
 RUN spack external find ncurses
+RUN spack external find gettext
 RUN spack external find cmake
 
 # Install the software, remove unnecessary deps
