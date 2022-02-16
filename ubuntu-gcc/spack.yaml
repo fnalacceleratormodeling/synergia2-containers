@@ -24,7 +24,7 @@ spack:
   - py-mpi4py
   - py-h5py+mpi
   - py-pytest
-  - ninja  
+  - ninja
   concretization: together
   view: true
   container:
@@ -38,9 +38,11 @@ spack:
       - bash
       - perl
       - cmake
+      - gfortran
       final:
       - build-essential
       - bash
       - cmake
-      - git  
-      - wget  
+      - git
+      - wget
+      - gfortran

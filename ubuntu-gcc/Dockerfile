@@ -73,7 +73,7 @@ FROM bootstrap as builder
 
 # Install OS packages needed to build the software
 RUN apt-get -yqq update && apt-get -yqq upgrade \
- && apt-get -yqq install build-essential bash perl cmake \
+ && apt-get -yqq install build-essential bash perl cmake gfortran \
  && rm -rf /var/lib/apt/lists/*
 
 # What we want to install and how we want to install it
@@ -146,7 +146,7 @@ ENV DEBIAN_FRONTEND=noninteractive   \
     TZ=Etc/UTC
 
 RUN apt-get -yqq update && apt-get -yqq upgrade \
- && apt-get -yqq install build-essential bash cmake git wget \
+ && apt-get -yqq install build-essential bash cmake git wget gfortran \
  && rm -rf /var/lib/apt/lists/*
-
 ENTRYPOINT ["/bin/bash", "--rcfile", "/etc/profile", "-l"]
+
