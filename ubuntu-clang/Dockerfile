@@ -76,7 +76,6 @@ RUN apt-get -yqq update && apt-get -yqq upgrade \
  && apt-get -yqq install build-essential bash perl cmake wget gcc-10 g++-10 gfortran-10 \
  && rm -rf /var/lib/apt/lists/*
 
-
 # Install LLVM in builder
 RUN apt-get -yqq update && apt-get -yqq install lsb-release wget software-properties-common
 RUN wget https://apt.llvm.org/llvm.sh && \
@@ -111,12 +110,13 @@ RUN mkdir /opt/spack-environment \
 &&   echo "      - clang" \
 &&   echo "      providers:" \
 &&   echo "        mpi:" \
-&&   echo "        - intel-oneapi-mpi" \
+&&   echo "        - mpich" \
 &&   echo "        blas:" \
 &&   echo "        - openblas" \
 &&   echo "        lapack:" \
 &&   echo "        - openblas" \
 &&   echo "  specs:" \
+&&   echo "  - mpich@develop~fortran device=ch4 netmod=ofi" \
 &&   echo "  - hdf5@1.12.1+hl+mpi" \
 &&   echo "  - fftw+mpi+openmp" \
 &&   echo "  - gsl" \
@@ -178,3 +178,4 @@ RUN apt-get -yqq update && apt-get -yqq upgrade \
  && apt-get -yqq install build-essential bash cmake git wget gcc-10 g++-10 gfortran-10 \
  && rm -rf /var/lib/apt/lists/*
 ENTRYPOINT ["/bin/bash", "--rcfile", "/etc/profile", "-l"]
+

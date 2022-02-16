@@ -26,13 +26,16 @@ spack:
       compiler:
       - 'clang'
       providers:
+        # Cannot use intel-oneapi-mpi with clang
+        # for some reason, so use mpich for now.
         mpi:
-        - intel-oneapi-mpi
+        - mpich
         blas:
         - openblas
         lapack:
         - openblas
   specs:
+  - mpich@develop~fortran device=ch4 netmod=ofi  
   - hdf5@1.12.1+hl+mpi
   - fftw+mpi+openmp
   - gsl
