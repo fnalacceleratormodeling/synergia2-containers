@@ -77,9 +77,7 @@ RUN apt-get -yqq update && apt-get -yqq upgrade \
  && rm -rf /var/lib/apt/lists/*
 
 # Get latest CMake, since we need 3.19 default is 3.16
-RUN wget https://apt.kitware.com/kitware-archive.sh && \
-    chmod +x kitware-archive.sh && \
-    ./kitware-archive.sh
+RUN wget -qO- "https://cmake.org/files/v3.22/cmake-3.22.2-linux-x86_64.tar.gz" | tar --strip-components=1 -xz -C /usr/local
 
 # What we want to install and how we want to install it
 # is specified in a manifest file (spack.yaml)
@@ -138,6 +136,11 @@ RUN cd /opt/spack-environment && \
 # Bare OS image to run the installed executables
 FROM ubuntu:20.04
 
+COPY --from=builder /opt/spack-environment /opt/spack-environment
+COPY --from=builder /opt/software /opt/software
+COPY --from=builder /opt/view /opt/view
+COPY --from=builder /etc/profile.d/z10_spack_environment.sh /etc/profile.d/z10_spack_environment.sh
+
 # Noninteractive install!
 ENV DEBIAN_FRONTEND=noninteractive   \
     LANGUAGE=en_US.UTF-8 \
@@ -145,20 +148,12 @@ ENV DEBIAN_FRONTEND=noninteractive   \
     LC_ALL=en_US.UTF-8 \
     TZ=Etc/UTC
 
-COPY --from=builder /opt/spack-environment /opt/spack-environment
-COPY --from=builder /opt/software /opt/software
-COPY --from=builder /opt/view /opt/view
-COPY --from=builder /etc/profile.d/z10_spack_environment.sh /etc/profile.d/z10_spack_environment.sh
-
-
 RUN apt-get -yqq update && apt-get -yqq upgrade \
  && apt-get -yqq install build-essential bash git wget gfortran \
  && rm -rf /var/lib/apt/lists/*
 
 # Get latest CMake, since we need 3.19 default is 3.16
-RUN wget https://apt.kitware.com/kitware-archive.sh && \
-    chmod +x kitware-archive.sh && \
-    ./kitware-archive.sh
+RUN wget -qO- "https://cmake.org/files/v3.22/cmake-3.22.2-linux-x86_64.tar.gz" | tar --strip-components=1 -xz -C /usr/local
 
 ENTRYPOINT ["/bin/bash", "--rcfile", "/etc/profile", "-l"]
 
