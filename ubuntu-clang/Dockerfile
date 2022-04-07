@@ -127,7 +127,6 @@ RUN mkdir /opt/spack-environment \
 &&   echo "  - hdf5@1.12.1+hl+mpi" \
 &&   echo "  - fftw+mpi+openmp" \
 &&   echo "  - gsl" \
-&&   echo "  - kokkos+openmp~cuda std=17" \
 &&   echo "  - python" \
 &&   echo "  - py-numpy" \
 &&   echo "  - py-mpi4py" \
