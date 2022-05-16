@@ -118,8 +118,7 @@ RUN spack external find cmake
 # Install the software, remove unnecessary deps
 RUN cd /opt/spack-environment && \
     spack env activate . && \
-    spack install --fail-fast && \
-    spack gc -y
+    spack install --fail-fast 
 
 # Strip all the binaries
 RUN find -L /opt/view/* -type f -exec readlink -f '{}' \; | \

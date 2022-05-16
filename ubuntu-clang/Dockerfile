@@ -87,7 +87,7 @@ RUN wget https://apt.kitware.com/kitware-archive.sh && \
 RUN apt-get -yqq update && apt-get -yqq install lsb-release wget software-properties-common
 RUN wget https://apt.llvm.org/llvm.sh && \
     chmod +x llvm.sh && \
-    ./llvm.sh 13 all
+    ./llvm.sh 14 all
 
 # What we want to install and how we want to install it
 # is specified in a manifest file (spack.yaml)
@@ -95,10 +95,10 @@ RUN mkdir /opt/spack-environment \
 &&  (echo "spack:" \
 &&   echo "  compilers:" \
 &&   echo "  - compiler:" \
-&&   echo "      spec: clang@13.0.1" \
+&&   echo "      spec: clang@14.0.3" \
 &&   echo "      paths:" \
-&&   echo "        cc: /usr/bin/clang-13" \
-&&   echo "        cxx: /usr/bin/clang++-13" \
+&&   echo "        cc: /usr/bin/clang-14" \
+&&   echo "        cxx: /usr/bin/clang++-14" \
 &&   echo "        f77: /usr/bin/gfortran-10" \
 &&   echo "        fc: /usr/bin/gfortran-10" \
 &&   echo "      flags:" \
@@ -147,8 +147,7 @@ RUN spack external find cmake
 # Install the software, remove unnecessary deps
 RUN cd /opt/spack-environment && \
     spack env activate . && \
-    spack install --fail-fast && \
-    spack gc -y
+    spack install --fail-fast 
 
 # Strip all the binaries
 RUN find -L /opt/view/* -type f -exec readlink -f '{}' \; | \
@@ -184,7 +183,7 @@ RUN apt-get -yqq update && apt-get -yqq upgrade \
 RUN apt-get -yqq update && apt-get -yqq install lsb-release wget software-properties-common
 RUN wget https://apt.llvm.org/llvm.sh && \
     chmod +x llvm.sh && \
-    ./llvm.sh 13 all
+    ./llvm.sh 14 all
 
 # Get latest CMake, since we need 3.19 default is 3.16
 RUN wget -qO- "https://cmake.org/files/v3.22/cmake-3.22.2-linux-x86_64.tar.gz" | tar --strip-components=1 -xz -C /usr/local
