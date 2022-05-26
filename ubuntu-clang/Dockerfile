@@ -112,7 +112,7 @@ RUN mkdir /opt/spack-environment \
 &&   echo "  packages:" \
 &&   echo "    all:" \
 &&   echo "      target:" \
-&&   echo "      - haswell" \
+&&   echo "      - broadwell" \
 &&   echo "      compiler:" \
 &&   echo "      - clang" \
 &&   echo "      providers:" \

@@ -22,7 +22,7 @@ spack:
   packages:
     all:
       target:
-      - 'haswell'
+      - 'broadwell'
       compiler:
       - 'clang'
       providers:

@@ -86,7 +86,7 @@ RUN mkdir /opt/spack-environment \
 &&   echo "  packages:" \
 &&   echo "    all:" \
 &&   echo "      target:" \
-&&   echo "      - haswell" \
+&&   echo "      - broadwell" \
 &&   echo "      providers:" \
 &&   echo "        mpi:" \
 &&   echo "        - intel-oneapi-mpi" \
