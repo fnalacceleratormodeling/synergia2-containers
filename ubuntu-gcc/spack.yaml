@@ -36,6 +36,7 @@ spack:
       - build-essential
       - bash
       - perl
+      - cmake  
       - gfortran
       - wget
       - tar
@@ -43,6 +44,7 @@ spack:
       - build-essential
       - bash
       - git
+      - cmake  
       - wget
       - gfortran
       - tar  

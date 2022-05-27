@@ -3,7 +3,7 @@ FROM spack/ubuntu-jammy:latest as builder
 
 # Install OS packages needed to build the software
 RUN apt-get -yqq update && apt-get -yqq upgrade \
- && apt-get -yqq install build-essential bash perl gfortran wget tar \
+ && apt-get -yqq install build-essential bash perl cmake gfortran wget tar \
  && rm -rf /var/lib/apt/lists/*
 
 # Hack until spack fixes https://github.com/spack/spack/issues/27960
@@ -79,7 +79,7 @@ ENV DEBIAN_FRONTEND=noninteractive   \
     TZ=Etc/UTC
 
 RUN apt-get -yqq update && apt-get -yqq upgrade \
- && apt-get -yqq install build-essential bash git wget gfortran tar \
+ && apt-get -yqq install build-essential bash git cmake wget gfortran tar \
  && rm -rf /var/lib/apt/lists/*
 ENTRYPOINT ["/bin/bash", "--rcfile", "/etc/profile", "-l"]
 
