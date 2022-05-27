@@ -29,7 +29,7 @@ spack:
   container:
     format: docker
     images:
-      os: ubuntu:20.04
+      os: ubuntu:22.04
       spack: develop
     os_packages:
       build:
@@ -37,10 +37,12 @@ spack:
       - bash
       - perl
       - gfortran
-      - wget  
+      - wget
+      - tar
       final:
       - build-essential
       - bash
       - git
       - wget
       - gfortran
+      - tar  
