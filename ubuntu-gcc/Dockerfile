@@ -19,7 +19,7 @@ RUN mkdir /opt/spack-environment \
 &&   echo "      - broadwell" \
 &&   echo "      providers:" \
 &&   echo "        mpi:" \
-&&   echo "        - intel-oneapi-mpi" \
+&&   echo "        - mpich" \
 &&   echo "        blas:" \
 &&   echo "        - openblas" \
 &&   echo "        lapack:" \
@@ -38,13 +38,6 @@ RUN mkdir /opt/spack-environment \
 &&   echo "  view: /opt/view" \
 &&   echo "  config:" \
 &&   echo "    install_tree: /opt/software") > /opt/spack-environment/spack.yaml
-
-# Find externals
-RUN spack external find tar
-RUN spack external find perl
-RUN spack external find ncurses
-RUN spack external find gettext
-RUN spack external find cmake
 
 # Install the software, remove unnecessary deps
 RUN cd /opt/spack-environment && \
