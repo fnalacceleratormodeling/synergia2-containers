@@ -1,13 +1,13 @@
 # Build stage with Spack pre-installed and ready to be used
 FROM spack/ubuntu-jammy:latest as builder
 
-# Hack until spack fixes https://github.com/spack/spack/issues/27960
-RUN sed -i 's/platform.release()/"5.4.100"/g' /opt/spack/var/spack/repos/builtin/packages/qt/package.py
-
 # Install OS packages needed to build the software
 RUN apt-get -yqq update && apt-get -yqq upgrade \
  && apt-get -yqq install build-essential bash perl wget cmake tar gfortran \
  && rm -rf /var/lib/apt/lists/*
+
+# Hack until spack fixes https://github.com/spack/spack/issues/27960
+RUN sed -i 's/platform.release()/"5.4.100"/g' /opt/spack/var/spack/repos/builtin/packages/qt/package.py
 
 # Install LLVM in builder
 RUN apt-get -yqq update && apt-get -yqq install lsb-release wget software-properties-common
@@ -38,7 +38,7 @@ RUN mkdir /opt/spack-environment \
 &&   echo "  packages:" \
 &&   echo "    all:" \
 &&   echo "      target:" \
-&&   echo "      - broadwell" \
+&&   echo "      - x86_64_v2" \
 &&   echo "      compiler:" \
 &&   echo "      - clang" \
 &&   echo "      providers:" \
@@ -53,7 +53,7 @@ RUN mkdir /opt/spack-environment \
 &&   echo "  - hdf5@1.12.1+hl+mpi" \
 &&   echo "  - fftw+mpi+openmp" \
 &&   echo "  - gsl" \
-&&   echo "  - python" \
+&&   echo "  - python+pythoncmd" \
 &&   echo "  - py-numpy" \
 &&   echo "  - py-mpi4py" \
 &&   echo "  - py-h5py+mpi" \

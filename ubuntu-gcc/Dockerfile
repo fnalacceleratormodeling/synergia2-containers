@@ -16,7 +16,7 @@ RUN mkdir /opt/spack-environment \
 &&   echo "  packages:" \
 &&   echo "    all:" \
 &&   echo "      target:" \
-&&   echo "      - broadwell" \
+&&   echo "      - x86_64_v2" \
 &&   echo "      providers:" \
 &&   echo "        mpi:" \
 &&   echo "        - mpich" \
@@ -28,7 +28,7 @@ RUN mkdir /opt/spack-environment \
 &&   echo "  - hdf5@1.12.1+hl+mpi" \
 &&   echo "  - fftw+mpi+openmp" \
 &&   echo "  - gsl" \
-&&   echo "  - python" \
+&&   echo "  - python+pythoncmd" \
 &&   echo "  - py-numpy" \
 &&   echo "  - py-mpi4py" \
 &&   echo "  - py-h5py+mpi" \
