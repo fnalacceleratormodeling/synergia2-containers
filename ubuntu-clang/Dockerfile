@@ -50,6 +50,7 @@ RUN mkdir /opt/spack-environment \
 &&   echo "        - openblas" \
 &&   echo "  specs:" \
 &&   echo "  - mpich@develop~fortran device=ch4 netmod=ofi" \
+&&   echo "  - petsc@main~fortran" \
 &&   echo "  - hdf5@1.12.1+hl+mpi" \
 &&   echo "  - fftw+mpi+openmp" \
 &&   echo "  - gsl" \
@@ -59,7 +60,8 @@ RUN mkdir /opt/spack-environment \
 &&   echo "  - py-h5py+mpi" \
 &&   echo "  - py-pytest" \
 &&   echo "  - ninja" \
-&&   echo "  concretization: together" \
+&&   echo "  concretizer:" \
+&&   echo "    unify: true" \
 &&   echo "  view: /opt/view" \
 &&   echo "  config:" \
 &&   echo "    install_tree: /opt/software") > /opt/spack-environment/spack.yaml
@@ -72,10 +74,7 @@ RUN spack external find gettext
 RUN spack external find cmake
 
 # Install the software, remove unnecessary deps
-RUN cd /opt/spack-environment && \
-    spack env activate . && \
-    spack install --fail-fast && \
-    spack gc -y
+RUN cd /opt/spack-environment && spack env activate . && spack install --fail-fast && spack gc -y
 
 # Strip all the binaries
 RUN find -L /opt/view/* -type f -exec readlink -f '{}' \; | \
@@ -93,8 +92,16 @@ FROM ubuntu:22.04
 
 COPY --from=builder /opt/spack-environment /opt/spack-environment
 COPY --from=builder /opt/software /opt/software
+COPY --from=builder /opt/._view /opt/._view
 COPY --from=builder /opt/view /opt/view
 COPY --from=builder /etc/profile.d/z10_spack_environment.sh /etc/profile.d/z10_spack_environment.sh
+
+# Noninteractive install!
+ENV DEBIAN_FRONTEND=noninteractive   \
+    LANGUAGE=en_US.UTF-8 \
+    LANG=en_US.UTF-8 \
+    LC_ALL=en_US.UTF-8 \
+    TZ=Etc/UTC
 
 # Install LLVM in final container
 RUN apt-get -yqq update && apt-get -yqq install lsb-release wget software-properties-common
@@ -105,5 +112,6 @@ RUN wget https://apt.llvm.org/llvm.sh && \
 RUN apt-get -yqq update && apt-get -yqq upgrade \
  && apt-get -yqq install build-essential bash git cmake tar wget gfortran \
  && rm -rf /var/lib/apt/lists/*
-ENTRYPOINT ["/bin/bash", "--rcfile", "/etc/profile", "-l"]
+ENTRYPOINT ["/bin/bash", "--rcfile", "/etc/profile", "-l", "-c", "$*", "--" ]
+CMD [ "/bin/bash" ]
 
