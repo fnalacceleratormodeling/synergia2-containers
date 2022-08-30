@@ -50,7 +50,7 @@ RUN mkdir /opt/spack-environment \
 &&   echo "        - openblas" \
 &&   echo "  specs:" \
 &&   echo "  - mpich@develop~fortran device=ch4 netmod=ofi" \
-&&   echo "  - petsc@main~fortran" \
+&&   echo "  - petsc@main~fortran+debug" \
 &&   echo "  - hdf5@1.12.1+hl+mpi" \
 &&   echo "  - fftw+mpi+openmp" \
 &&   echo "  - gsl" \
