@@ -13,7 +13,7 @@ RUN sed -i 's/platform.release()/"5.4.100"/g' /opt/spack/var/spack/repos/builtin
 RUN apt-get -yqq update && apt-get -yqq install lsb-release wget software-properties-common
 RUN wget https://apt.llvm.org/llvm.sh && \
     chmod +x llvm.sh && \
-    ./llvm.sh 14 all
+    ./llvm.sh 15 all
 
 # What we want to install and how we want to install it
 # is specified in a manifest file (spack.yaml)
@@ -21,10 +21,10 @@ RUN mkdir /opt/spack-environment \
 &&  (echo "spack:" \
 &&   echo "  compilers:" \
 &&   echo "  - compiler:" \
-&&   echo "      spec: clang@14.0.5" \
+&&   echo "      spec: clang@15.0.3" \
 &&   echo "      paths:" \
-&&   echo "        cc: /usr/bin/clang-14" \
-&&   echo "        cxx: /usr/bin/clang++-14" \
+&&   echo "        cc: /usr/bin/clang-15" \
+&&   echo "        cxx: /usr/bin/clang++-15" \
 &&   echo "        f77: /usr/bin/gfortran-11" \
 &&   echo "        fc: /usr/bin/gfortran-11" \
 &&   echo "      flags:" \
@@ -51,7 +51,7 @@ RUN mkdir /opt/spack-environment \
 &&   echo "  specs:" \
 &&   echo "  - mpich@develop~fortran device=ch4 netmod=ofi" \
 &&   echo "  - petsc@main~fortran+debug" \
-&&   echo "  - hdf5@1.12.1+hl+mpi" \
+&&   echo "  - hdf5@1.12.2+hl+mpi" \
 &&   echo "  - fftw+mpi+openmp" \
 &&   echo "  - gsl" \
 &&   echo "  - python+pythoncmd" \
