@@ -8,6 +8,8 @@ RUN apt-get -yqq update && apt-get -yqq upgrade \
 
 # Hack until spack fixes https://github.com/spack/spack/issues/27960
 RUN sed -i 's/platform.release()/"5.4.100"/g' /opt/spack/var/spack/repos/builtin/packages/qt/package.py
+# Hack until spack fixes https://github.com/spack/spack/pull/35400
+RUN sed -i 's/"-DMPI_Fortran_COMPILER:PATH=%s" % spec["mpi"].mpifc,"/""/g' /opt/spack/var/spack/repos/builtin/packages/hdf5/package.py
 
 # Install LLVM in builder
 RUN apt-get -yqq update && apt-get -yqq install lsb-release wget software-properties-common
@@ -51,7 +53,7 @@ RUN mkdir /opt/spack-environment \
 &&   echo "  specs:" \
 &&   echo "  - mpich@develop~fortran device=ch4 netmod=ofi" \
 &&   echo "  - petsc@main~fortran+debug" \
-&&   echo "  - hdf5@1.12.2+hl+mpi" \
+&&   echo "  - hdf5@1.12.2+hl+mpi~fortran" \
 &&   echo "  - fftw+mpi+openmp" \
 &&   echo "  - gsl" \
 &&   echo "  - python+pythoncmd" \
@@ -65,13 +67,6 @@ RUN mkdir /opt/spack-environment \
 &&   echo "  view: /opt/view" \
 &&   echo "  config:" \
 &&   echo "    install_tree: /opt/software") > /opt/spack-environment/spack.yaml
-
-# Find externals
-RUN spack external find tar
-RUN spack external find perl
-RUN spack external find ncurses
-RUN spack external find gettext
-RUN spack external find cmake
 
 # Install the software, remove unnecessary deps
 RUN cd /opt/spack-environment && spack env activate . && spack install --fail-fast && spack gc -y
