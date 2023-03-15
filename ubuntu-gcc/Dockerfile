@@ -25,7 +25,8 @@ RUN mkdir /opt/spack-environment \
 &&   echo "        lapack:" \
 &&   echo "        - openblas" \
 &&   echo "  specs:" \
-&&   echo "  - hdf5@1.12.1+hl+mpi" \
+&&   echo "  - hdf5@1.12.1+hl+mpi~fortran" \
+&&   echo "  - mpich@develop~fortran device=ch4 netmod=ofi" \
 &&   echo "  - petsc@main~fortran+debug" \
 &&   echo "  - fftw+mpi+openmp" \
 &&   echo "  - gsl" \
@@ -46,7 +47,6 @@ RUN spack external find tar
 RUN spack external find perl
 RUN spack external find ncurses
 RUN spack external find gettext
-RUN spack external find cmake
 
 # Install the software, remove unnecessary deps
 RUN cd /opt/spack-environment && spack env activate . && spack install --fail-fast && spack gc -y
