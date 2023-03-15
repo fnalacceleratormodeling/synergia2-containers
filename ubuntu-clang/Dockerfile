@@ -8,8 +8,6 @@ RUN apt-get -yqq update && apt-get -yqq upgrade \
 
 # Hack until spack fixes https://github.com/spack/spack/issues/27960
 RUN sed -i 's/platform.release()/"5.4.100"/g' /opt/spack/var/spack/repos/builtin/packages/qt/package.py
-# Hack until spack fixes https://github.com/spack/spack/pull/35400
-RUN sed -i 's/"-DMPI_Fortran_COMPILER:PATH=%s" % spec["mpi"].mpifc,"/""/g' /opt/spack/var/spack/repos/builtin/packages/hdf5/package.py
 
 # Install LLVM in builder
 RUN apt-get -yqq update && apt-get -yqq install lsb-release wget software-properties-common
