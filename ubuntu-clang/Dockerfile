@@ -3,7 +3,7 @@ FROM spack/ubuntu-jammy:latest as builder
 
 # Install OS packages needed to build the software
 RUN apt-get -yqq update && apt-get -yqq upgrade \
- && apt-get -yqq install build-essential bash perl wget cmake tar gfortran \
+ && apt-get -yqq install build-essential bash perl wget tar \
  && rm -rf /var/lib/apt/lists/*
 
 # Hack until spack fixes https://github.com/spack/spack/issues/27960
@@ -25,8 +25,8 @@ RUN mkdir /opt/spack-environment \
 &&   echo "      paths:" \
 &&   echo "        cc: /usr/bin/clang-15" \
 &&   echo "        cxx: /usr/bin/clang++-15" \
-&&   echo "        f77: /usr/bin/gfortran-11" \
-&&   echo "        fc: /usr/bin/gfortran-11" \
+&&   echo "        f77:" \
+&&   echo "        fc:" \
 &&   echo "      flags:" \
 &&   echo "        cxxflags: -stdlib=libc++" \
 &&   echo "      operating_system: ubuntu22.04" \
@@ -50,6 +50,7 @@ RUN mkdir /opt/spack-environment \
 &&   echo "        - openblas" \
 &&   echo "  specs:" \
 &&   echo "  - mpich@develop~fortran device=ch4 netmod=ofi" \
+&&   echo "  - openblas~fortran" \
 &&   echo "  - petsc@main~fortran+debug" \
 &&   echo "  - hdf5@1.12.2+hl+mpi~fortran" \
 &&   echo "  - fftw+mpi+openmp" \
@@ -65,6 +66,12 @@ RUN mkdir /opt/spack-environment \
 &&   echo "  view: /opt/view" \
 &&   echo "  config:" \
 &&   echo "    install_tree: /opt/software") > /opt/spack-environment/spack.yaml
+
+# Find externals
+RUN spack external find tar
+RUN spack external find perl
+RUN spack external find ncurses
+RUN spack external find gettext
 
 # Install the software, remove unnecessary deps
 RUN cd /opt/spack-environment && spack env activate . && spack install --fail-fast && spack gc -y
@@ -100,10 +107,10 @@ ENV DEBIAN_FRONTEND=noninteractive   \
 RUN apt-get -yqq update && apt-get -yqq install lsb-release wget software-properties-common
 RUN wget https://apt.llvm.org/llvm.sh && \
     chmod +x llvm.sh && \
-    ./llvm.sh 14 all
+    ./llvm.sh 15 all
 
 RUN apt-get -yqq update && apt-get -yqq upgrade \
- && apt-get -yqq install build-essential bash git cmake tar wget gfortran \
+ && apt-get -yqq install build-essential bash git tar wget \
  && rm -rf /var/lib/apt/lists/*
 ENTRYPOINT ["/bin/bash", "--rcfile", "/etc/profile", "-l", "-c", "$*", "--" ]
 CMD [ "/bin/bash" ]
