@@ -38,10 +38,11 @@ spack:
   - mpich@develop~fortran device=ch4 netmod=ofi
   - openblas@develop~fortran  
   - petsc@main~fortran+debug
-  - hdf5@1.12.2+hl+mpi~fortran
+  - hdf5@1.12.2+hl+mpi~fortran  
   - fftw+mpi+openmp
   - gsl
   - python+pythoncmd
+  - py-pyparsing
   - py-numpy
   - py-mpi4py
   - py-h5py+mpi
