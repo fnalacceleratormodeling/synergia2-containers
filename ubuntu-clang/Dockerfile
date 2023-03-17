@@ -56,6 +56,7 @@ RUN mkdir /opt/spack-environment \
 &&   echo "  - fftw+mpi+openmp" \
 &&   echo "  - gsl" \
 &&   echo "  - python+pythoncmd" \
+&&   echo "  - py-pyparsing" \
 &&   echo "  - py-numpy" \
 &&   echo "  - py-mpi4py" \
 &&   echo "  - py-h5py+mpi" \
@@ -96,7 +97,7 @@ COPY --from=builder /opt/._view /opt/._view
 COPY --from=builder /opt/view /opt/view
 COPY --from=builder /etc/profile.d/z10_spack_environment.sh /etc/profile.d/z10_spack_environment.sh
 
-# Noninteractive install!
+#  Noninteractive install!
 ENV DEBIAN_FRONTEND=noninteractive   \
     LANGUAGE=en_US.UTF-8 \
     LANG=en_US.UTF-8 \

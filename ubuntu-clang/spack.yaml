@@ -40,8 +40,10 @@ spack:
   - petsc@main~fortran+debug
   - hdf5@1.12.2+hl+mpi~fortran
   - fftw+mpi+openmp
+  - cmake  
   - gsl
   - python+pythoncmd
+  - py-pyparsing
   - py-numpy
   - py-mpi4py
   - py-h5py+mpi

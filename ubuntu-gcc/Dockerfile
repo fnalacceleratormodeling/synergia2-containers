@@ -31,6 +31,7 @@ RUN mkdir /opt/spack-environment \
 &&   echo "  - fftw+mpi+openmp" \
 &&   echo "  - gsl" \
 &&   echo "  - python+pythoncmd" \
+&&   echo "  - py-pyparsing" \
 &&   echo "  - py-numpy" \
 &&   echo "  - py-mpi4py" \
 &&   echo "  - py-h5py+mpi" \
