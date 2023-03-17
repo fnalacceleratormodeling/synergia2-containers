@@ -54,6 +54,7 @@ RUN mkdir /opt/spack-environment \
 &&   echo "  - petsc@main~fortran+debug" \
 &&   echo "  - hdf5@1.12.2+hl+mpi~fortran" \
 &&   echo "  - fftw+mpi+openmp" \
+&&   echo "  - cmake" \
 &&   echo "  - gsl" \
 &&   echo "  - python+pythoncmd" \
 &&   echo "  - py-pyparsing" \
