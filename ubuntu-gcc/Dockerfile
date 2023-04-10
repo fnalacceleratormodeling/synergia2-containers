@@ -26,7 +26,7 @@ RUN mkdir /opt/spack-environment \
 &&   echo "        - openblas" \
 &&   echo "  specs:" \
 &&   echo "  - hdf5@1.12.1+hl+mpi~fortran" \
-&&   echo "  - mpich@develop~fortran device=ch4 netmod=ofi" \
+&&   echo "  - mpich@develop~fortran device=ch4 netmod=ofi pmi=pmix" \
 &&   echo "  - petsc@main~fortran+debug" \
 &&   echo "  - fftw+mpi+openmp" \
 &&   echo "  - gsl" \
