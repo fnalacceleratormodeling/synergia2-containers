@@ -13,7 +13,7 @@ RUN sed -i 's/platform.release()/"5.4.100"/g' /opt/spack/var/spack/repos/builtin
 RUN apt-get -yqq update && apt-get -yqq install lsb-release wget software-properties-common
 RUN add-apt-repository "deb http://archive.ubuntu.com/ubuntu/ jammy-proposed main"
 RUN apt-get -yqq update 
-RUN apt-get install llvm-15-dev 
+RUN apt-get -yqq install llvm-15-dev 
 
 # What we want to install and how we want to install it
 # is specified in a manifest file (spack.yaml)
@@ -109,7 +109,7 @@ ENV DEBIAN_FRONTEND=noninteractive   \
 RUN apt-get -yqq update && apt-get -yqq install lsb-release wget software-properties-common
 RUN add-apt-repository "deb http://archive.ubuntu.com/ubuntu/ jammy-proposed main"
 RUN apt-get -yqq update 
-RUN apt-get install llvm-15-dev 
+RUN apt-get -yqq install llvm-15-dev 
 
 RUN apt-get -yqq update && apt-get -yqq upgrade \
  && apt-get -yqq install build-essential bash git tar wget \
