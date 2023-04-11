@@ -11,6 +11,7 @@ RUN sed -i 's/platform.release()/"5.4.100"/g' /opt/spack/var/spack/repos/builtin
 
 # Install LLVM in builder
 RUN apt-get -yqq update && apt-get -yqq install lsb-release wget software-properties-common
+RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
 RUN add-apt-repository "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-15 main"
 RUN apt-get -yqq update 
 RUN apt-get -yqq install llvm-toolchain-15
@@ -107,6 +108,7 @@ ENV DEBIAN_FRONTEND=noninteractive   \
 
 # Install LLVM in final container
 RUN apt-get -yqq update && apt-get -yqq install lsb-release wget software-properties-common
+RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
 RUN add-apt-repository "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-15 main"
 RUN apt-get -yqq update 
 RUN apt-get -yqq install llvm-toolchain-15
