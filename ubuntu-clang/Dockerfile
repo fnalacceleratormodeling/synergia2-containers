@@ -13,7 +13,7 @@ RUN sed -i 's/platform.release()/"5.4.100"/g' /opt/spack/var/spack/repos/builtin
 RUN apt-get -yqq update && apt-get -yqq install lsb-release wget software-properties-common
 RUN wget https://apt.llvm.org/llvm.sh && \
     chmod +x llvm.sh && \
-    ./llvm.sh 15 all
+    ./llvm.sh 15 clang-15 libc++-15-dev libc++abi-15-dev libomp-15-dev
 
 # What we want to install and how we want to install it
 # is specified in a manifest file (spack.yaml)
@@ -109,7 +109,7 @@ ENV DEBIAN_FRONTEND=noninteractive   \
 RUN apt-get -yqq update && apt-get -yqq install lsb-release wget software-properties-common
 RUN wget https://apt.llvm.org/llvm.sh && \
     chmod +x llvm.sh && \
-    ./llvm.sh 15 all
+    ./llvm.sh 15 clang-15 libc++-15-dev libc++abi-15-dev libomp-15-dev
 
 RUN apt-get -yqq update && apt-get -yqq upgrade \
  && apt-get -yqq install build-essential bash git tar wget \
