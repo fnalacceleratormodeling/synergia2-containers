@@ -11,9 +11,9 @@ RUN sed -i 's/platform.release()/"5.4.100"/g' /opt/spack/var/spack/repos/builtin
 
 # Install LLVM in builder
 RUN apt-get -yqq update && apt-get -yqq install lsb-release wget software-properties-common
-RUN add-apt-repository "deb http://archive.ubuntu.com/ubuntu/ jammy-proposed main"
+RUN add-apt-repository "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-15 main"
 RUN apt-get -yqq update 
-RUN apt-get -yqq install llvm-15-dev 
+RUN apt-get -yqq install llvm-toolchain-15
 
 # What we want to install and how we want to install it
 # is specified in a manifest file (spack.yaml)
@@ -107,9 +107,9 @@ ENV DEBIAN_FRONTEND=noninteractive   \
 
 # Install LLVM in final container
 RUN apt-get -yqq update && apt-get -yqq install lsb-release wget software-properties-common
-RUN add-apt-repository "deb http://archive.ubuntu.com/ubuntu/ jammy-proposed main"
+RUN add-apt-repository "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-15 main"
 RUN apt-get -yqq update 
-RUN apt-get -yqq install llvm-15-dev 
+RUN apt-get -yqq install llvm-toolchain-15
 
 RUN apt-get -yqq update && apt-get -yqq upgrade \
  && apt-get -yqq install build-essential bash git tar wget \
