@@ -1,4 +1,4 @@
-FROM nvidia/cuda:11.2.1-devel as bootstrap
+FROM nvidia/cuda:11.8.0-devel-ubuntu22.04 as bootstrap
 
 ENV SPACK_ROOT=/opt/spack \
     CURRENTLY_BUILDING_DOCKER_IMAGE=1 \
@@ -8,10 +8,6 @@ ENV DEBIAN_FRONTEND=noninteractive   \
     LANGUAGE=en_US.UTF-8 \
     LANG=en_US.UTF-8 \
     LC_ALL=en_US.UTF-8
-
-# https://developer.nvidia.com/blog/updating-the-cuda-linux-gpg-repository-key/
-RUN curl https://developer.download.nvidia.com/compute/cuda/repos/$distro/$arch/cuda-keyring_1.0-1_all.deb -o cuda-keyring_1.0-1_all.deb && \
-	sudo dpkg -i cuda-keyring_1.0-1_all.deb
 
 RUN apt-get -yqq update \
  && apt-get -yqq upgrade \
@@ -127,7 +123,7 @@ RUN cd /opt/spack-environment && \
 
 
 # Bare OS image to run the installed executables
-FROM nvidia/cuda:11.2.1-base
+FROM nvidia/cuda:11.8.0-base-ubuntu22.04
 
 COPY --from=builder /opt/spack-environment /opt/spack-environment
 COPY --from=builder /opt/software /opt/software
