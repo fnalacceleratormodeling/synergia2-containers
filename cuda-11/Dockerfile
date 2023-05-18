@@ -9,6 +9,11 @@ ENV DEBIAN_FRONTEND=noninteractive   \
     LANG=en_US.UTF-8 \
     LC_ALL=en_US.UTF-8
 
+# https://developer.nvidia.com/blog/updating-the-cuda-linux-gpg-repository-key/
+RUN  apt-get -yqq install --no-install-recommends \
+	wget && wget https://developer.download.nvidia.com/compute/cuda/repos/$distro/$arch/cuda-keyring_1.0-1_all.deb && \
+	sudo dpkg -i cuda-keyring_1.0-1_all.deb
+
 RUN apt-get -yqq update \
  && apt-get -yqq upgrade \
  && apt-get -yqq install --no-install-recommends \
