@@ -90,7 +90,7 @@ RUN mkdir /opt/spack-environment \
 &&   echo '        - openblas' \
 &&   echo '  specs:' \
 &&   echo '  - hdf5@1.12.2+hl+mpi~fortran' \
-&&   echo '  - mpich@develop~fortran device=ch4 netmod=ofi' \
+&&   echo '  - mpich~fortran device=ch4 netmod=ofi' \
 &&   echo '  - petsc@main~fortran+debug' \
 &&   echo '  - fftw+mpi+openmp' \
 &&   echo '  - gsl' \
