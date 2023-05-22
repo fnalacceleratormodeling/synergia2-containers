@@ -126,9 +126,8 @@ RUN find -L /opt/view/* -type f -exec readlink -f '{}' \; | \
 RUN cd /opt/spack-environment && \
     spack env activate --sh -d . >> /etc/profile.d/z10_spack_environment.sh
 
-
-# Bare OS image to run the installed executables
-FROM nvidia/cuda:11.8.0-base-ubuntu22.04
+# Override spack behavior to have nvcc in the final container image
+FROM nvidia/cuda:11.8.0-devel-ubuntu22.04
 
 COPY --from=builder /opt/spack-environment /opt/spack-environment
 COPY --from=builder /opt/software /opt/software
