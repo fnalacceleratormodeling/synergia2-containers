@@ -1,4 +1,4 @@
-FROM nvidia/cuda:11.8.0-devel-ubuntu22.04 as bootstrap
+FROM nvidia/cuda:11.2.2-devel as bootstrap
 
 ENV SPACK_ROOT=/opt/spack \
     CURRENTLY_BUILDING_DOCKER_IMAGE=1 \
@@ -8,6 +8,8 @@ ENV DEBIAN_FRONTEND=noninteractive   \
     LANGUAGE=en_US.UTF-8 \
     LANG=en_US.UTF-8 \
     LC_ALL=en_US.UTF-8
+
+RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/3bf863cc.pub
 
 RUN apt-get -yqq update \
  && apt-get -yqq upgrade \
@@ -24,16 +26,19 @@ RUN apt-get -yqq update \
         iproute2 \
         locales \
         make \
+        mercurial \
+        subversion \
         python3 \
         python3-pip \
         python3-setuptools \
         unzip \
+        zstd \
  && locale-gen en_US.UTF-8 \
  && pip3 install boto3 \
  && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir $SPACK_ROOT && cd $SPACK_ROOT && \
-    git clone https://github.com/spack/spack.git . && git fetch origin develop:container_branch && git checkout container_branch  && \
+    git init --quiet && git remote add origin https://github.com/spack/spack.git && git fetch --depth=1 origin develop && git checkout --detach FETCH_HEAD && \
     mkdir -p $SPACK_ROOT/opt/spack
 
 RUN ln -s $SPACK_ROOT/share/spack/docker/entrypoint.bash \
@@ -46,7 +51,7 @@ RUN ln -s $SPACK_ROOT/share/spack/docker/entrypoint.bash \
 RUN mkdir -p /root/.spack \
  && cp $SPACK_ROOT/share/spack/docker/modules.yaml \
         /root/.spack/modules.yaml \
- && rm -rf /root/*.* /run/nologin $SPACK_ROOT/.git
+ && rm -rf /root/*.* /run/nologin
 
 # [WORKAROUND]
 # https://superuser.com/questions/1241548/
@@ -60,7 +65,9 @@ WORKDIR /root
 SHELL ["docker-shell"]
 
 # Creates the package cache
-RUN spack bootstrap now && spack spec hdf5+mpi
+RUN spack bootstrap now \
+    && spack bootstrap status --optional \
+    && spack spec hdf5+mpi
 
 ENTRYPOINT ["/bin/bash", "/opt/spack/share/spack/docker/entrypoint.bash"]
 CMD ["interactive-shell"]
@@ -89,9 +96,9 @@ RUN mkdir /opt/spack-environment \
 &&   echo '        lapack:' \
 &&   echo '        - openblas' \
 &&   echo '  specs:' \
-&&   echo '  - hdf5@1.12.2+hl+mpi~fortran' \
+&&   echo '  - hdf5+hl+mpi~fortran' \
 &&   echo '  - mpich~fortran device=ch4 netmod=ofi' \
-&&   echo '  - petsc@main~fortran+debug' \
+&&   echo '  - petsc@main~fortran+debug+cuda' \
 &&   echo '  - gsl' \
 &&   echo '  - python+pythoncmd' \
 &&   echo '  - py-pyparsing' \
@@ -102,7 +109,7 @@ RUN mkdir /opt/spack-environment \
 &&   echo '  - ninja' \
 &&   echo '  concretizer:' \
 &&   echo '    unify: true' \
-&&   echo '  view: /opt/view' \
+&&   echo '  view: /opt/views/view' \
 &&   echo '  config:' \
 &&   echo '    install_tree: /opt/software') > /opt/spack-environment/spack.yaml
 
@@ -111,12 +118,13 @@ RUN spack external find tar
 RUN spack external find perl
 RUN spack external find ncurses
 RUN spack external find gettext
+RUN spack external find cuda
 
 # Install the software, remove unnecessary deps
 RUN cd /opt/spack-environment && spack env activate . && spack install --fail-fast && spack gc -y
 
 # Strip all the binaries
-RUN find -L /opt/view/* -type f -exec readlink -f '{}' \; | \
+RUN find -L /opt/views/view/* -type f -exec readlink -f '{}' \; | \
     xargs file -i | \
     grep 'charset=binary' | \
     grep 'x-executable\|x-archive\|x-sharedlib' | \
@@ -124,21 +132,38 @@ RUN find -L /opt/view/* -type f -exec readlink -f '{}' \; | \
 
 # Modifications to the environment that are necessary to run
 RUN cd /opt/spack-environment && \
-    spack env activate --sh -d . >> /etc/profile.d/z10_spack_environment.sh
+    spack env activate --sh -d . > activate.sh
+
 
 # Override spack behavior to have nvcc in the final container image
-FROM nvidia/cuda:11.8.0-devel-ubuntu22.04
+FROM nvidia/cuda:11.2.2-devel as bootstrap
 
 COPY --from=builder /opt/spack-environment /opt/spack-environment
 COPY --from=builder /opt/software /opt/software
-COPY --from=builder /opt/._view /opt/._view
-COPY --from=builder /opt/view /opt/view
-COPY --from=builder /etc/profile.d/z10_spack_environment.sh /etc/profile.d/z10_spack_environment.sh
 
+# paths.view is a symlink, so copy the parent to avoid dereferencing and duplicating it
+COPY --from=builder /opt/views /opt/views
+
+RUN { \
+      echo '#!/bin/sh' \
+      && echo '.' /opt/spack-environment/activate.sh \
+      && echo 'exec "$@"'; \
+    } > /entrypoint.sh \
+&& chmod a+x /entrypoint.sh \
+&& ln -s /opt/views/view /opt/view
+
+# Noninteractive install!
+ENV DEBIAN_FRONTEND=noninteractive   \
+    LANGUAGE=en_US.UTF-8 \
+    LANG=en_US.UTF-8 \
+    LC_ALL=en_US.UTF-8 \
+    TZ=Etc/UTC
+
+RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/3bf863cc.pub
 
 RUN apt-get -yqq update && apt-get -yqq upgrade \
  && apt-get -yqq install build-essential bash git cmake wget gfortran tar \
  && rm -rf /var/lib/apt/lists/*
-ENTRYPOINT ["/bin/bash", "--rcfile", "/etc/profile", "-l", "-c", "$*", "--" ]
+ENTRYPOINT [ "/entrypoint.sh" ]
 CMD [ "/bin/bash" ]
 
