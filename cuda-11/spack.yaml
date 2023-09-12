@@ -32,7 +32,7 @@ spack:
   container:
     format: docker
     images:
-      os: nvidia/cuda:11.2.2
+      os: nvidia/cuda:11.8.0
       spack: develop
     os_packages:
       build:
