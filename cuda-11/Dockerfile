@@ -1,4 +1,4 @@
-FROM nvidia/11.8.0-devel-ubuntu22.04 as bootstrap
+FROM nvidia/cuda:11.8.0-devel-ubuntu22.04 as bootstrap
 
 ENV SPACK_ROOT=/opt/spack \
     CURRENTLY_BUILDING_DOCKER_IMAGE=1 \
@@ -136,7 +136,7 @@ RUN cd /opt/spack-environment && \
 
 
 # Override spack behavior to have nvcc in the final container image
-FROM nvidia/11.8.0-devel-ubuntu22.04 as bootstrap
+FROM nvidia/cuda:11.8.0-devel-ubuntu22.04 as bootstrap
 
 COPY --from=builder /opt/spack-environment /opt/spack-environment
 COPY --from=builder /opt/software /opt/software
