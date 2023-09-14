@@ -42,12 +42,15 @@ spack:
   - gsl
   - python+pythoncmd
   - py-pyparsing
+  - py-cython@3.0.0  
   - py-numpy
-  - py-mpi4py
-  - py-h5py+mpi
+  - py-mpi4py@master
+  - py-h5py@3.8.0+mpi
   - py-pytest
   - ninja  
   concretizer:
+    duplicates: 
+      strategy: "full"
     unify: true
   view: true
   container:
@@ -66,5 +69,6 @@ spack:
       - build-essential
       - bash
       - git
-      - tar 
-      - wget 
+      - tar
+      - wget
+

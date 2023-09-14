@@ -9,6 +9,9 @@ RUN apt-get -yqq update && apt-get -yqq upgrade \
 # Hack until spack fixes https://github.com/spack/spack/issues/27960
 RUN sed -i 's/platform.release()/"5.4.100"/g' /opt/spack/var/spack/repos/builtin/packages/qt/package.py
 
+# Hack
+RUN sed -i 's/conflicts("^py-cython@3:")//g' /opt/spack/var/spack/repos/builtin/packages/py-mpi4py/package.py
+
 # What we want to install and how we want to install it
 # is specified in a manifest file (spack.yaml)
 RUN mkdir /opt/spack-environment \
@@ -26,7 +29,7 @@ RUN mkdir /opt/spack-environment \
 &&   echo '        - openblas' \
 &&   echo '  specs:' \
 &&   echo '  - hdf5+hl+mpi~fortran' \
-&&   echo '  - mpich~fortran device=ch4 netmod=ofi' \
+&&   echo '  - mpich@3.4.3~fortran netmod=ofi' \
 &&   echo '  - petsc@main~fortran+debug' \
 &&   echo '  - fftw+mpi+openmp' \
 &&   echo '  - gsl' \
