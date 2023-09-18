@@ -9,11 +9,14 @@ RUN apt-get -yqq update && apt-get -yqq upgrade \
 # Hack until spack fixes https://github.com/spack/spack/issues/27960
 RUN sed -i 's/platform.release()/"5.4.100"/g' /opt/spack/var/spack/repos/builtin/packages/qt/package.py
 
+# Hack
+RUN sed -i 's/conflicts("^py-cython@3:")//g' /opt/spack/var/spack/repos/builtin/packages/py-mpi4py/package.py
+
 # Install LLVM in builder
-RUN apt-get -yqq update && apt-get -yqq install lsb-release wget software-properties-common
+RUN apt-get -yqq update && apt-get -yqq install lsb-release software-properties-common
 RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
 RUN add-apt-repository "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-15 main"
-RUN apt-get -yqq update 
+RUN apt-get -yqq update
 RUN apt-get -yqq install clang-15 libc++-15-dev libc++abi-15-dev libomp-15-dev
 
 # What we want to install and how we want to install it
@@ -50,7 +53,7 @@ RUN mkdir /opt/spack-environment \
 &&   echo '        lapack:' \
 &&   echo '        - openblas' \
 &&   echo '  specs:' \
-&&   echo '  - mpich~fortran device=ch4 netmod=ofi' \
+&&   echo '  - mpich@3.4.3~fortran netmod=ofi' \
 &&   echo '  - openblas@develop~fortran' \
 &&   echo '  - petsc@main~fortran+debug' \
 &&   echo '  - hdf5+hl+mpi~fortran' \
@@ -108,23 +111,19 @@ RUN { \
 && chmod a+x /entrypoint.sh \
 && ln -s /opt/views/view /opt/view
 
-#  Noninteractive install!
-ENV DEBIAN_FRONTEND=noninteractive   \
-    LANGUAGE=en_US.UTF-8 \
-    LANG=en_US.UTF-8 \
-    LC_ALL=en_US.UTF-8 \
-    TZ=Etc/UTC
-
-# Install LLVM in final container
-RUN apt-get -yqq update && apt-get -yqq install lsb-release wget software-properties-common
-RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
-RUN add-apt-repository "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-15 main"
-RUN apt-get -yqq update 
-RUN apt-get -yqq install clang-15 libc++-15-dev libc++abi-15-dev libomp-15-dev
 
 RUN apt-get -yqq update && apt-get -yqq upgrade \
  && apt-get -yqq install build-essential bash git tar wget \
  && rm -rf /var/lib/apt/lists/*
+
+# Install LLVM in the final image
+RUN apt-get -yqq update && apt-get -yqq install lsb-release software-properties-common
+RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
+RUN add-apt-repository "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-15 main"
+RUN apt-get -yqq update
+RUN apt-get -yqq install clang-15 libc++-15-dev libc++abi-15-dev libomp-15-dev
+
+
 ENTRYPOINT [ "/entrypoint.sh" ]
 CMD [ "/bin/bash" ]
 
