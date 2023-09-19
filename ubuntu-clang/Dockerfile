@@ -3,21 +3,18 @@ FROM spack/ubuntu-jammy:latest as builder
 
 # Install OS packages needed to build the software
 RUN apt-get -yqq update && apt-get -yqq upgrade \
- && apt-get -yqq install build-essential bash perl wget tar \
+ && apt-get -yqq install build-essential bash perl wget tar gfortran curl \
  && rm -rf /var/lib/apt/lists/*
 
 # Hack until spack fixes https://github.com/spack/spack/issues/27960
 RUN sed -i 's/platform.release()/"5.4.100"/g' /opt/spack/var/spack/repos/builtin/packages/qt/package.py
 
-# Hack
-RUN sed -i 's/conflicts("^py-cython@3:")//g' /opt/spack/var/spack/repos/builtin/packages/py-mpi4py/package.py
-
 # Install LLVM in builder
 RUN apt-get -yqq update && apt-get -yqq install lsb-release software-properties-common
 RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
-RUN add-apt-repository "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-15 main"
+RUN add-apt-repository "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-16 main"
 RUN apt-get -yqq update
-RUN apt-get -yqq install clang-15 libc++-15-dev libc++abi-15-dev libomp-15-dev
+RUN apt-get -yqq install clang-16 libc++-16-dev libc++abi-16-dev libomp-16-dev
 
 # What we want to install and how we want to install it
 # is specified in a manifest file (spack.yaml)
@@ -25,12 +22,12 @@ RUN mkdir /opt/spack-environment \
 &&  (echo spack: \
 &&   echo '  compilers:' \
 &&   echo '  - compiler:' \
-&&   echo '      spec: clang@15.0.3' \
+&&   echo '      spec: clang@16.0.3' \
 &&   echo '      paths:' \
-&&   echo '        cc: /usr/bin/clang-15' \
-&&   echo '        cxx: /usr/bin/clang++-15' \
-&&   echo '        f77: null' \
-&&   echo '        fc: null' \
+&&   echo '        cc: /usr/bin/clang-16' \
+&&   echo '        cxx: /usr/bin/clang++-16' \
+&&   echo '        f77: /usr/bin/gfortran' \
+&&   echo '        fc: /usr/bin/gfortran' \
 &&   echo '      flags:' \
 &&   echo '        cxxflags: -stdlib=libc++' \
 &&   echo '      operating_system: ubuntu22.04' \
@@ -53,7 +50,7 @@ RUN mkdir /opt/spack-environment \
 &&   echo '        lapack:' \
 &&   echo '        - openblas' \
 &&   echo '  specs:' \
-&&   echo '  - mpich@3.4.3~fortran netmod=ofi' \
+&&   echo '  - mpich+fortran device=ch4 netmod=ofi' \
 &&   echo '  - openblas@develop~fortran' \
 &&   echo '  - petsc@main~fortran+debug' \
 &&   echo '  - hdf5+hl+mpi~fortran' \
@@ -68,6 +65,8 @@ RUN mkdir /opt/spack-environment \
 &&   echo '  - py-pytest' \
 &&   echo '  - ninja' \
 &&   echo '  concretizer:' \
+&&   echo '    duplicates:' \
+&&   echo '      strategy: full' \
 &&   echo '    unify: true' \
 &&   echo '  view: /opt/views/view' \
 &&   echo '  config:' \
@@ -113,16 +112,15 @@ RUN { \
 
 
 RUN apt-get -yqq update && apt-get -yqq upgrade \
- && apt-get -yqq install build-essential bash git tar wget \
+ && apt-get -yqq install build-essential bash git tar gfortran curl wget \
  && rm -rf /var/lib/apt/lists/*
 
 # Install LLVM in the final image
 RUN apt-get -yqq update && apt-get -yqq install lsb-release software-properties-common
 RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
-RUN add-apt-repository "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-15 main"
+RUN add-apt-repository "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-16 main"
 RUN apt-get -yqq update
-RUN apt-get -yqq install clang-15 libc++-15-dev libc++abi-15-dev libomp-15-dev
-
+RUN apt-get -yqq install clang-16 libc++-16-dev libc++abi-16-dev libomp-16-dev
 
 ENTRYPOINT [ "/entrypoint.sh" ]
 CMD [ "/bin/bash" ]

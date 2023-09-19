@@ -3,14 +3,11 @@ FROM spack/ubuntu-jammy:latest as builder
 
 # Install OS packages needed to build the software
 RUN apt-get -yqq update && apt-get -yqq upgrade \
- && apt-get -yqq install build-essential bash perl cmake gfortran wget tar \
+ && apt-get -yqq install build-essential bash perl cmake gfortran wget tar curl \
  && rm -rf /var/lib/apt/lists/*
 
 # Hack until spack fixes https://github.com/spack/spack/issues/27960
 RUN sed -i 's/platform.release()/"5.4.100"/g' /opt/spack/var/spack/repos/builtin/packages/qt/package.py
-
-# Hack
-RUN sed -i 's/conflicts("^py-cython@3:")//g' /opt/spack/var/spack/repos/builtin/packages/py-mpi4py/package.py
 
 # What we want to install and how we want to install it
 # is specified in a manifest file (spack.yaml)
@@ -29,7 +26,7 @@ RUN mkdir /opt/spack-environment \
 &&   echo '        - openblas' \
 &&   echo '  specs:' \
 &&   echo '  - hdf5+hl+mpi~fortran' \
-&&   echo '  - mpich@3.4.3~fortran netmod=ofi' \
+&&   echo '  - mpich+fortran device=ch4 netmod=ofi' \
 &&   echo '  - petsc@main~fortran+debug' \
 &&   echo '  - fftw+mpi+openmp' \
 &&   echo '  - gsl' \
@@ -84,16 +81,9 @@ RUN { \
 && chmod a+x /entrypoint.sh \
 && ln -s /opt/views/view /opt/view
 
-# Noninteractive install!
-ENV DEBIAN_FRONTEND=noninteractive   \
-    LANGUAGE=en_US.UTF-8 \
-    LANG=en_US.UTF-8 \
-    LC_ALL=en_US.UTF-8 \
-    TZ=Etc/UTC
-
 
 RUN apt-get -yqq update && apt-get -yqq upgrade \
- && apt-get -yqq install build-essential bash git cmake wget gfortran tar \
+ && apt-get -yqq install build-essential bash git cmake wget gfortran tar curl \
  && rm -rf /var/lib/apt/lists/*
 ENTRYPOINT [ "/entrypoint.sh" ]
 CMD [ "/bin/bash" ]
