@@ -5,12 +5,12 @@
 spack:
   compilers:
   - compiler:
-      spec: clang@15.0.3
+      spec: clang@16.0.3
       paths:
-        cc: /usr/bin/clang-15
-        cxx: /usr/bin/clang++-15
-        f77:
-        fc: 
+        cc: /usr/bin/clang-16
+        cxx: /usr/bin/clang++-16
+        f77: /usr/bin/gfortran
+        fc: /usr/bin/gfortran
       flags:
         cxxflags: -stdlib=libc++
       operating_system: ubuntu22.04
@@ -33,7 +33,7 @@ spack:
         lapack:
         - openblas
   specs:
-  - mpich~fortran device=ch4 netmod=ofi
+  - mpich+fortran device=ch4 netmod=ofi
   - openblas@develop~fortran  
   - petsc@main~fortran+debug
   - hdf5+hl+mpi~fortran
@@ -42,10 +42,9 @@ spack:
   - gsl
   - python+pythoncmd
   - py-pyparsing
-  - py-cython@3.0.0  
   - py-numpy
-  - py-mpi4py@master
-  - py-h5py@3.8.0+mpi
+  - py-mpi4py
+  - py-h5py+mpi
   - py-pytest
   - ninja  
   concretizer:
@@ -65,10 +64,13 @@ spack:
       - perl
       - wget
       - tar
+      - gfortran
+      - curl  
       final:
       - build-essential
       - bash
       - git
       - tar
+      - gfortran
+      - curl  
       - wget
-
