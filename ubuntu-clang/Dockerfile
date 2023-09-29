@@ -54,8 +54,8 @@ RUN mkdir /opt/spack-environment \
 &&   echo '        - openblas' \
 &&   echo '  specs:' \
 &&   echo '  - mpich@3.4.3~fortran netmod=ofi' \
-&&   echo '  - openblas@develop~fortran' \
-&&   echo '  - petsc@main~fortran+debug' \
+&&   echo '  - openblas~fortran' \
+&&   echo '  - petsc@3.20.0~fortran+debug' \
 &&   echo '  - hdf5+hl+mpi~fortran' \
 &&   echo '  - fftw+mpi+openmp' \
 &&   echo '  - cmake' \

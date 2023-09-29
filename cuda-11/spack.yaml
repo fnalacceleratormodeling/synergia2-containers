@@ -17,7 +17,7 @@ spack:
   specs:
   - hdf5+hl+mpi~fortran
   - mpich~fortran device=ch4 netmod=ofi
-  - petsc@main~fortran+debug+cuda
+  - petsc@3.20.0~fortran+debug+cuda
   - gsl
   - python+pythoncmd
   - py-pyparsing  
