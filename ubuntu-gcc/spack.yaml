@@ -28,8 +28,6 @@ spack:
   - py-pytest
   - ninja
   concretizer:
-    duplicates: 
-      strategy: "full"
     unify: true
   view: true
   container:
@@ -46,6 +44,7 @@ spack:
       - gfortran
       - wget
       - tar
+      - curl  
       final:
       - build-essential
       - bash
@@ -53,4 +52,5 @@ spack:
       - cmake  
       - wget
       - gfortran
-      - tar  
+      - tar
+      - curl  
