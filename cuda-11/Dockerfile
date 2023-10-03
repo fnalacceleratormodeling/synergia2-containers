@@ -98,7 +98,7 @@ RUN mkdir /opt/spack-environment \
 &&   echo '  specs:' \
 &&   echo '  - hdf5+hl+mpi~fortran' \
 &&   echo '  - mpich~fortran device=ch4 netmod=ofi' \
-&&   echo '  - petsc@main~fortran+debug+cuda' \
+&&   echo '  - petsc@3.20.0~fortran+debug+cuda' \
 &&   echo '  - gsl' \
 &&   echo '  - python+pythoncmd' \
 &&   echo '  - py-pyparsing' \

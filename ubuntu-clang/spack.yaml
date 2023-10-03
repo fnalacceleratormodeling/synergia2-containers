@@ -33,9 +33,9 @@ spack:
         lapack:
         - openblas
   specs:
-  - mpich+fortran device=ch4 netmod=ofi
-  - openblas@develop~fortran  
-  - petsc@main~fortran+debug
+  - mpich~fortran device=ch4 netmod=ofi
+  - openblas~fortran  
+  - petsc@3.20.0~fortran+debug
   - hdf5+hl+mpi~fortran
   - fftw+mpi+openmp
   - cmake  

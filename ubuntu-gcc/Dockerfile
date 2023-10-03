@@ -26,8 +26,8 @@ RUN mkdir /opt/spack-environment \
 &&   echo '        - openblas' \
 &&   echo '  specs:' \
 &&   echo '  - hdf5+hl+mpi~fortran' \
-&&   echo '  - mpich+fortran device=ch4 netmod=ofi' \
-&&   echo '  - petsc@main~fortran+debug' \
+&&   echo '  - mpich+fortran netmod=ofi' \
+&&   echo '  - petsc@3.20.0~fortran+debug' \
 &&   echo '  - fftw+mpi+openmp' \
 &&   echo '  - gsl' \
 &&   echo '  - python+pythoncmd' \
