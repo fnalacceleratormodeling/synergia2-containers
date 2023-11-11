@@ -33,12 +33,13 @@ spack:
         lapack:
         - openblas
   specs:
-  - mpich~fortran device=ch4 netmod=ofi
-  - openblas~fortran  
-  - petsc@3.20.0~fortran+debug
+  - mpich+fortran device=ch4 netmod=ofi
+  - openblas~fortran
+  - openpmd-api+python
+  - petsc@3.20.1~fortran+debug
   - hdf5+hl+mpi~fortran
   - fftw+mpi+openmp
-  - cmake  
+  - cmake
   - gsl
   - python+pythoncmd
   - py-pyparsing

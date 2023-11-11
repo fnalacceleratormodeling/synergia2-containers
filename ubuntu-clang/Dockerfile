@@ -50,9 +50,10 @@ RUN mkdir /opt/spack-environment \
 &&   echo '        lapack:' \
 &&   echo '        - openblas' \
 &&   echo '  specs:' \
-&&   echo '  - mpich+fortran netmod=ofi' \
+&&   echo '  - mpich+fortran device=ch4 netmod=ofi' \
 &&   echo '  - openblas~fortran' \
-&&   echo '  - petsc@3.20.0~fortran+debug' \
+&&   echo '  - openpmd-api+python' \
+&&   echo '  - petsc@3.20.1~fortran+debug' \
 &&   echo '  - hdf5+hl+mpi~fortran' \
 &&   echo '  - fftw+mpi+openmp' \
 &&   echo '  - cmake' \
@@ -109,7 +110,6 @@ RUN { \
     } > /entrypoint.sh \
 && chmod a+x /entrypoint.sh \
 && ln -s /opt/views/view /opt/view
-
 
 RUN apt-get -yqq update && apt-get -yqq upgrade \
  && apt-get -yqq install build-essential bash git tar gfortran curl wget \
