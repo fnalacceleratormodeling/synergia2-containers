@@ -21,7 +21,7 @@ jobs:
 
     strategy:
       matrix:
-        image: ['ubuntu-gcc','ubuntu-clang','cuda-11']
+        image: ['ubuntu-gcc','ubuntu-clang','cuda-11', 'cuda-12']
 
     env:
       REGISTRY: ghcr.io 
