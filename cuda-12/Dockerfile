@@ -99,7 +99,7 @@ set -o noclobber \
 &&   echo '  specs:' \
 &&   echo '  - hdf5+hl+mpi~fortran' \
 &&   echo '  - mpich~fortran device=ch4 netmod=ofi' \
-&&   echo '  - petsc~fortran+debug+cuda' \
+&&   echo '  - petsc~fortran+debug+cuda cuda_arch=70' \
 &&   echo '  - gsl' \
 &&   echo '  - python+pythoncmd' \
 &&   echo '  - py-pyparsing' \
@@ -122,7 +122,7 @@ RUN spack external find gettext
 RUN spack external find cuda
 
 # Install the software, remove unnecessary deps
-RUN cd /opt/spack-environment && spack env activate . && spack install -v --fail-fast && spack gc -y
+RUN cd /opt/spack-environment && spack env activate . && spack install --fail-fast && spack gc -y
 
 # Strip all the binaries
 RUN find -L /opt/views/view/* -type f -exec readlink -f '{}' \; | \
