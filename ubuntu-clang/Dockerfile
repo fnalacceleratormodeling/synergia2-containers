@@ -53,7 +53,7 @@ RUN mkdir /opt/spack-environment \
 &&   echo '  - mpich+fortran device=ch4 netmod=ofi' \
 &&   echo '  - openblas~fortran' \
 &&   echo '  - openpmd-api+python' \
-&&   echo '  - petsc@3.20.1~fortran+debug' \
+&&   echo '  - petsc~fortran+debug' \
 &&   echo '  - hdf5+hl+mpi~fortran' \
 &&   echo '  - fftw+mpi+openmp' \
 &&   echo '  - cmake' \
