@@ -14,7 +14,7 @@ RUN apt-get -yqq update && apt-get -yqq install lsb-release software-properties-
 RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
 RUN add-apt-repository "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-17 main"
 RUN apt-get -yqq update
-RUN apt-get -yqq install clang-17 libc++-17-dev libc++abi-17-dev libomp-17-dev
+RUN apt-get -yqq install clang-17 libc++-17-dev libc++abi-17-dev libomp-17-dev libclang-rt-17-dev
 
 # What we want to install and how we want to install it
 # is specified in a manifest file (spack.yaml)
@@ -120,7 +120,7 @@ RUN apt-get -yqq update && apt-get -yqq install lsb-release software-properties-
 RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
 RUN add-apt-repository "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-17 main"
 RUN apt-get -yqq update
-RUN apt-get -yqq install clang-17 libc++-17-dev libc++abi-17-dev libomp-17-dev
+RUN apt-get -yqq install clang-17 libc++-17-dev libc++abi-17-dev libomp-17-dev libclang-rt-17-dev
 
 ENTRYPOINT [ "/entrypoint.sh" ]
 CMD [ "/bin/bash" ]
