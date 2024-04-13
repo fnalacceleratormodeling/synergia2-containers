@@ -12,9 +12,9 @@ RUN sed -i 's/platform.release()/"5.4.100"/g' /opt/spack/var/spack/repos/builtin
 # Install LLVM in builder
 RUN apt-get -yqq update && apt-get -yqq install lsb-release software-properties-common
 RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
-RUN add-apt-repository "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-16 main"
+RUN add-apt-repository "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-17 main"
 RUN apt-get -yqq update
-RUN apt-get -yqq install clang-16 libc++-16-dev libc++abi-16-dev libomp-16-dev
+RUN apt-get -yqq install clang-17 libc++-17-dev libc++abi-17-dev libomp-17-dev libclang-rt-17-dev
 
 # What we want to install and how we want to install it
 # is specified in a manifest file (spack.yaml)
@@ -22,10 +22,10 @@ RUN mkdir /opt/spack-environment \
 &&  (echo spack: \
 &&   echo '  compilers:' \
 &&   echo '  - compiler:' \
-&&   echo '      spec: clang@16.0.3' \
+&&   echo '      spec: clang@17.0.3' \
 &&   echo '      paths:' \
-&&   echo '        cc: /usr/bin/clang-16' \
-&&   echo '        cxx: /usr/bin/clang++-16' \
+&&   echo '        cc: /usr/bin/clang-17' \
+&&   echo '        cxx: /usr/bin/clang++-17' \
 &&   echo '        f77: /usr/bin/gfortran' \
 &&   echo '        fc: /usr/bin/gfortran' \
 &&   echo '      flags:' \
@@ -118,9 +118,9 @@ RUN apt-get -yqq update && apt-get -yqq upgrade \
 # Install LLVM in the final image
 RUN apt-get -yqq update && apt-get -yqq install lsb-release software-properties-common
 RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
-RUN add-apt-repository "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-16 main"
+RUN add-apt-repository "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-17 main"
 RUN apt-get -yqq update
-RUN apt-get -yqq install clang-16 libc++-16-dev libc++abi-16-dev libomp-16-dev
+RUN apt-get -yqq install clang-17 libc++-17-dev libc++abi-17-dev libomp-17-dev libclang-rt-17-dev
 
 ENTRYPOINT [ "/entrypoint.sh" ]
 CMD [ "/bin/bash" ]

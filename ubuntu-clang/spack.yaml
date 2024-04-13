@@ -5,10 +5,10 @@
 spack:
   compilers:
   - compiler:
-      spec: clang@16.0.3
+      spec: clang@17.0.3
       paths:
-        cc: /usr/bin/clang-16
-        cxx: /usr/bin/clang++-16
+        cc: /usr/bin/clang-17
+        cxx: /usr/bin/clang++-17
         f77: /usr/bin/gfortran
         fc: /usr/bin/gfortran
       flags:
@@ -36,7 +36,7 @@ spack:
   - mpich+fortran device=ch4 netmod=ofi
   - openblas~fortran
   - openpmd-api+python
-  - petsc@3.20.1~fortran+debug
+  - petsc~fortran+debug
   - hdf5+hl+mpi~fortran
   - fftw+mpi+openmp
   - cmake
