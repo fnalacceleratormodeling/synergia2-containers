@@ -80,6 +80,8 @@ RUN apt-get -yqq update && apt-get -yqq upgrade \
  && apt-get -yqq install build-essential bash perl cmake gfortran wget tar \
  && rm -rf /var/lib/apt/lists/*
 
+RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/3bf863cc.pub
+
 # What we want to install and how we want to install it
 # is specified in a manifest file (spack.yaml)
 RUN mkdir -p /opt/spack-environment && \
@@ -108,6 +110,7 @@ set -o noclobber \
 &&   echo '  - py-h5py+mpi' \
 &&   echo '  - py-pytest' \
 &&   echo '  - ninja' \
+&&   echo '  - mold' \
 &&   echo '  concretizer:' \
 &&   echo '    unify: true' \
 &&   echo '  view: /opt/views/view' \

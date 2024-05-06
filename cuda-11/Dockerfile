@@ -80,9 +80,12 @@ RUN apt-get -yqq update && apt-get -yqq upgrade \
  && apt-get -yqq install build-essential bash perl cmake gfortran wget tar \
  && rm -rf /var/lib/apt/lists/*
 
+RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/3bf863cc.pub
+
 # What we want to install and how we want to install it
 # is specified in a manifest file (spack.yaml)
-RUN mkdir /opt/spack-environment \
+RUN mkdir -p /opt/spack-environment && \
+set -o noclobber \
 &&  (echo spack: \
 &&   echo '  packages:' \
 &&   echo '    all:' \
@@ -98,7 +101,7 @@ RUN mkdir /opt/spack-environment \
 &&   echo '  specs:' \
 &&   echo '  - hdf5+hl+mpi~fortran' \
 &&   echo '  - mpich~fortran device=ch4 netmod=ofi' \
-&&   echo '  - petsc@3.20.0~fortran+debug+cuda' \
+&&   echo '  - petsc~fortran+debug+cuda cuda_arch=70' \
 &&   echo '  - gsl' \
 &&   echo '  - python+pythoncmd' \
 &&   echo '  - py-pyparsing' \
@@ -107,6 +110,7 @@ RUN mkdir /opt/spack-environment \
 &&   echo '  - py-h5py+mpi' \
 &&   echo '  - py-pytest' \
 &&   echo '  - ninja' \
+&&   echo '  - mold' \
 &&   echo '  concretizer:' \
 &&   echo '    unify: true' \
 &&   echo '  view: /opt/views/view' \
@@ -135,8 +139,8 @@ RUN cd /opt/spack-environment && \
     spack env activate --sh -d . > activate.sh
 
 
-# Override spack behavior to have nvcc in the final container image
-FROM nvidia/cuda:11.8.0-devel-ubuntu22.04 as bootstrap
+# Bare OS image to run the installed executables
+FROM nvidia/cuda:11.8.0-devel-ubuntu22.04
 
 COPY --from=builder /opt/spack-environment /opt/spack-environment
 COPY --from=builder /opt/software /opt/software
@@ -151,13 +155,6 @@ RUN { \
     } > /entrypoint.sh \
 && chmod a+x /entrypoint.sh \
 && ln -s /opt/views/view /opt/view
-
-# Noninteractive install!
-ENV DEBIAN_FRONTEND=noninteractive   \
-    LANGUAGE=en_US.UTF-8 \
-    LANG=en_US.UTF-8 \
-    LC_ALL=en_US.UTF-8 \
-    TZ=Etc/UTC
 
 RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/3bf863cc.pub
 

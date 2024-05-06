@@ -28,13 +28,14 @@ spack:
   - py-h5py+mpi
   - py-pytest
   - ninja
+  - mold
   concretizer:
     unify: true
   view: true
   container:
     format: docker
     images:
-      os: ubuntu:22.04
+      os: ubuntu:24.04
       spack: develop
     os_packages:
       build:

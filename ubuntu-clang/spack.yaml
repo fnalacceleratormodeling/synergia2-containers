@@ -47,7 +47,8 @@ spack:
   - py-mpi4py
   - py-h5py+mpi
   - py-pytest
-  - ninja  
+  - ninja
+  - mold
   concretizer:
     duplicates: 
       strategy: "full"
@@ -56,7 +57,7 @@ spack:
   container:
     format: docker
     images:
-      os: ubuntu:22.04
+      os: ubuntu:24.04
       spack: develop
     os_packages:
       build:
