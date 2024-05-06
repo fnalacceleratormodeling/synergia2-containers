@@ -1,5 +1,5 @@
 # Build stage with Spack pre-installed and ready to be used
-FROM spack/ubuntu-jammy:latest as builder
+FROM spack/ubuntu-noble:develop as builder
 
 # Install OS packages needed to build the software
 RUN apt-get -yqq update && apt-get -yqq upgrade \
@@ -18,7 +18,8 @@ RUN apt-get -yqq install clang-17 libc++-17-dev libc++abi-17-dev libomp-17-dev l
 
 # What we want to install and how we want to install it
 # is specified in a manifest file (spack.yaml)
-RUN mkdir /opt/spack-environment \
+RUN mkdir -p /opt/spack-environment && \
+set -o noclobber \
 &&  (echo spack: \
 &&   echo '  compilers:' \
 &&   echo '  - compiler:' \
@@ -65,6 +66,7 @@ RUN mkdir /opt/spack-environment \
 &&   echo '  - py-h5py+mpi' \
 &&   echo '  - py-pytest' \
 &&   echo '  - ninja' \
+&&   echo '  - mold' \
 &&   echo '  concretizer:' \
 &&   echo '    duplicates:' \
 &&   echo '      strategy: full' \
@@ -95,7 +97,7 @@ RUN cd /opt/spack-environment && \
 
 
 # Bare OS image to run the installed executables
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 
 COPY --from=builder /opt/spack-environment /opt/spack-environment
 COPY --from=builder /opt/software /opt/software
