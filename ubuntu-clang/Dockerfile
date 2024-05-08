@@ -31,7 +31,7 @@ set -o noclobber \
 &&   echo '        fc: /usr/bin/gfortran' \
 &&   echo '      flags:' \
 &&   echo '        cxxflags: -stdlib=libc++' \
-&&   echo '      operating_system: ubuntu22.04' \
+&&   echo '      operating_system: ubuntu24.04' \
 &&   echo '      modules: []' \
 &&   echo '      environment: {}' \
 &&   echo '      extra_rpaths: []' \
