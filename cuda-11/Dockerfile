@@ -103,9 +103,11 @@ set -o noclobber \
 &&   echo '  - mpich~fortran device=ch4 netmod=ofi' \
 &&   echo '  - petsc~fortran+debug+cuda cuda_arch=70' \
 &&   echo '  - gsl' \
+&&   echo '  - mold' \
 &&   echo '  - python+pythoncmd' \
 &&   echo '  - py-pyparsing' \
 &&   echo '  - py-numpy' \
+&&   echo '  - py-pybind11' \
 &&   echo '  - py-mpi4py' \
 &&   echo '  - py-h5py+mpi' \
 &&   echo '  - py-pytest' \
